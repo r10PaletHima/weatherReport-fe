@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    // Check login status on initial load
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsLoggedIn(!!token);
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // Clear token
+        setIsLoggedIn(false); // Update login state
+    };
+
+    return (
+        <Router>
+            <Routes>
+                {/* Default Route: Login */}
+                <Route
+                    path="/"
+                    element={!isLoggedIn ? <Login setIsLoggedIn={setIsLoggedIn} /> : <Navigate to="/dashboard" />}
+                />
+
+                {/* Dashboard Route with Logout Functionality */}
+                <Route
+                    path="/dashboard"
+                    element={
+                        isLoggedIn ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/" />
+                    }
+                />
+            </Routes>
+        </Router>
+    );
+};
 
 export default App;
