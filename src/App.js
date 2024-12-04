@@ -5,8 +5,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Signup from "./pages/Signup"; // Import the Signup page
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import LogsTable from "./components/LogsTable";
 
@@ -42,16 +42,10 @@ const App = () => {
         {/* Signup Route, only show if not logged in */}
         <Route
           path="/signup"
-          element={
-            !isLoggedIn ? (
-              <Signup setIsSignedUp={setIsLoggedIn} /> // Handle signup status
-            ) : (
-              <Navigate to="/dashboard" />
-            )
-          }
+          element={!isLoggedIn ? <Signup /> : <Navigate to="/dashboard" />}
         />
 
-        {/* Dashboard Route with Logout Functionality */}
+        {/* Dashboard Route */}
         <Route
           path="/dashboard"
           element={
@@ -63,11 +57,7 @@ const App = () => {
           }
         />
 
-        {/* Logs Route */}
-        <Route
-          path="/logs"
-          element={isLoggedIn ? <LogsTable /> : <Navigate to="/" />}
-        />
+        <Route path="/logs" element={<LogsTable />} />
       </Routes>
     </Router>
   );

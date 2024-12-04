@@ -11,9 +11,7 @@ import {
   TableRow,
   TableContainer,
   TextField,
-  Button,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid"; // MUI DataGrid
 import { fetchLogs } from "../services/api";
 
 // Enhance the styling of the table and individual elements
@@ -21,17 +19,17 @@ const styles = {
   paper: {
     padding: "20px",
     marginTop: "20px",
-    backgroundColor: "#f0f7ff", // Light blue for weather theme
+    backgroundColor: "#f0f7ff",
     borderRadius: "10px",
   },
   tableContainer: {
     marginTop: "20px",
-    backgroundColor: "#ffffff", // White background for better contrast
+    backgroundColor: "#ffffff",
     borderRadius: "10px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
   },
   headerCell: {
-    backgroundColor: "#1976d2", // Blue header for contrast
+    backgroundColor: "#1976d2",
     color: "white",
     fontWeight: "bold",
     fontSize: "16px",
@@ -45,27 +43,19 @@ const styles = {
     color: "#555",
   },
   title: {
-    color: "#1976d2", // Blue color for main titles
+    color: "#1976d2",
     fontWeight: "bold",
-  },
-  userDetail: {
-    marginBottom: "10px",
-    fontSize: "16px",
-    fontWeight: "500",
-    color: "#333",
   },
 };
 
 const LogsTable = () => {
   const [logs, setLogs] = useState([]);
-  const [userInfo, setUserInfo] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchUserLogs = async () => {
       try {
         const response = await fetchLogs();
-        setUserInfo(response.data.user);
         setLogs(response.data.logs);
       } catch (err) {
         console.error(err);
@@ -90,33 +80,7 @@ const LogsTable = () => {
       </Typography>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={4}>
-          <Paper style={styles.paper}>
-            <Typography variant="h6" style={styles.title}>
-              User Information
-            </Typography>
-            {userInfo ? (
-              <>
-                <Typography variant="body1" style={styles.userDetail}>
-                  <strong>Name:</strong> {userInfo.first_name}{" "}
-                  {userInfo.last_name}
-                </Typography>
-                <Typography variant="body1" style={styles.userDetail}>
-                  <strong>Email:</strong> {userInfo.email}
-                </Typography>
-                <Typography variant="body1" style={styles.userDetail}>
-                  <strong>Phone:</strong> {userInfo.phone_number}
-                </Typography>
-              </>
-            ) : (
-              <Typography variant="body1">
-                Loading user information...
-              </Typography>
-            )}
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={8}>
+        <Grid item xs={12}>
           <Paper style={styles.tableContainer}>
             <Typography variant="h6" style={styles.title}>
               User Access Logs
@@ -138,10 +102,10 @@ const LogsTable = () => {
                     <TableCell style={styles.headerCell}>Log ID</TableCell>
                     <TableCell style={styles.headerCell}>Query</TableCell>
                     <TableCell style={styles.headerCell}>Timestamp</TableCell>
-                    <TableCell style={styles.headerCell}>Location</TableCell>
-                    <TableCell style={styles.headerCell}>
-                      User Details
-                    </TableCell>
+                    {/* Commented out the Location column */}
+                    {/* <TableCell style={styles.headerCell}>Location</TableCell> */}
+                    <TableCell style={styles.headerCell}>User Name</TableCell>
+                    <TableCell style={styles.headerCell}>Email</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -157,40 +121,30 @@ const LogsTable = () => {
                         <TableCell style={styles.tableCell}>
                           {new Date(log.log_timestamp).toLocaleString()}
                         </TableCell>
-                        <TableCell style={styles.tableCell}>
-                          {log.location ? (
+                        {/* Commented out the Location column */}
+                        {/* <TableCell style={styles.tableCell}>
+                          {log.latitude && log.longitude ? (
                             <Typography
                               variant="body2"
                               style={styles.locationText}
                             >
-                              {log.location} (Lat: {log.latitude}, Lon:{" "}
-                              {log.longitude})
+                              Lat: {log.latitude}, Lon: {log.longitude}
                             </Typography>
                           ) : (
-                            <Typography
-                              variant="body2"
-                              style={styles.locationText}
-                            >
-                              No location provided
-                            </Typography>
+                            "No location provided"
                           )}
+                        </TableCell> */}
+                        <TableCell style={styles.tableCell}>
+                          {`${log.user_first_name} ${log.user_last_name}`}
                         </TableCell>
                         <TableCell style={styles.tableCell}>
-                          {userInfo ? (
-                            <Typography variant="body2">
-                              {userInfo.first_name} {userInfo.last_name}
-                            </Typography>
-                          ) : (
-                            <Typography variant="body2">
-                              Loading user details...
-                            </Typography>
-                          )}
+                          {log.user_email}
                         </TableCell>
                       </TableRow>
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={5} style={styles.tableCell}>
+                      <TableCell colSpan={6} style={styles.tableCell}>
                         No logs available
                       </TableCell>
                     </TableRow>

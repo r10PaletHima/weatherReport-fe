@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signup } from "../services/api";
+import { signup } from "../services/api"; // Your API service for signup
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -10,7 +10,7 @@ import {
   Link,
 } from "@mui/material";
 
-const Signup = ({ setIsSignedUp }) => {
+const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -18,11 +18,12 @@ const Signup = ({ setIsSignedUp }) => {
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
+      // Call your signup API with the required data
       await signup({
         username,
         password,
@@ -31,9 +32,9 @@ const Signup = ({ setIsSignedUp }) => {
         lastName,
         phoneNumber,
       });
-      setIsSignedUp(true); // Update signup status
-      navigate("/"); // Redirect to login page after successful signup
+      navigate("/"); // Redirect to the login page after successful signup
     } catch (err) {
+      // Handle errors from the API response
       setError(err.response?.data?.message || "Signup failed");
     }
   };
@@ -67,6 +68,7 @@ const Signup = ({ setIsSignedUp }) => {
           Weather App Signup
         </Typography>
         <form onSubmit={handleSignup}>
+          {/* Username */}
           <Box sx={{ marginBottom: "1rem" }}>
             <TextField
               fullWidth
@@ -79,6 +81,8 @@ const Signup = ({ setIsSignedUp }) => {
               sx={{ marginBottom: "1rem" }}
             />
           </Box>
+
+          {/* Email */}
           <Box sx={{ marginBottom: "1rem" }}>
             <TextField
               fullWidth
@@ -91,6 +95,8 @@ const Signup = ({ setIsSignedUp }) => {
               sx={{ marginBottom: "1rem" }}
             />
           </Box>
+
+          {/* First Name */}
           <Box sx={{ marginBottom: "1rem" }}>
             <TextField
               fullWidth
@@ -103,6 +109,8 @@ const Signup = ({ setIsSignedUp }) => {
               sx={{ marginBottom: "1rem" }}
             />
           </Box>
+
+          {/* Last Name */}
           <Box sx={{ marginBottom: "1rem" }}>
             <TextField
               fullWidth
@@ -115,6 +123,8 @@ const Signup = ({ setIsSignedUp }) => {
               sx={{ marginBottom: "1rem" }}
             />
           </Box>
+
+          {/* Phone Number */}
           <Box sx={{ marginBottom: "1rem" }}>
             <TextField
               fullWidth
@@ -127,6 +137,8 @@ const Signup = ({ setIsSignedUp }) => {
               sx={{ marginBottom: "1rem" }}
             />
           </Box>
+
+          {/* Password */}
           <Box sx={{ marginBottom: "1rem" }}>
             <TextField
               fullWidth
@@ -139,6 +151,8 @@ const Signup = ({ setIsSignedUp }) => {
               helperText={error}
             />
           </Box>
+
+          {/* Signup Button */}
           <Button
             type="submit"
             fullWidth
@@ -150,13 +164,14 @@ const Signup = ({ setIsSignedUp }) => {
           </Button>
         </form>
 
+        {/* Login Redirect */}
         <Box
           sx={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}
         >
           <Typography variant="body2" color="textSecondary">
             Already have an account?{" "}
             <Link
-              href="/login"
+              href="/"
               variant="body2"
               sx={{ color: "#2196f3", fontWeight: "bold" }}
             >
